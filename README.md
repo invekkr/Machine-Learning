@@ -38,9 +38,12 @@ ML/
 │       ├── notes.md                    # YData Profiling, automated EDA, metrics & warnings
 │       └── pandas_profiling.ipynb
 ├── 03_Feature_Engineering/
-│   └── 01_Standardization/
-│       ├── notes.md                    # Z-score theory, algorithms affected, leakage prevention
-│       └── standardization.ipynb       # Practical experiment: KNN Without vs With Scaling
+│   ├── 01_Standardization/
+│   │   ├── notes.md                    # Z-score theory, algorithms affected, leakage prevention
+│   │   └── standardization.ipynb       # Practical experiment: KNN Without vs With Scaling
+│   └── 02_Normalization/
+│       ├── notes.md                    # Min-Max, Mean Norm, MaxAbs (Sparse data), Robust (IQR)
+│       └── normalization.ipynb         # Step-by-step mental math + Scikit-Learn implementations
 └── outputs/
     ├── plots/                          # Saved figures and visualizations
     └── reports/                        # Automated profiling HTML reports
@@ -98,6 +101,15 @@ ML/
   * Identifying scale-sensitive algorithms (KNN, SVM, K-Means, Neural Networks) vs. scale-invariant tree models (Decision Trees, Random Forests, XGBoost)
   * Rigorous prevention of **Train/Test Data Leakage** (`fit_transform` on `X_train`, `transform` on `X_test`)
   * **Head-to-Head Practical Experiment**: KNN on Wine recognition dataset demonstrating a jump from **72.22%** (unscaled) to **94.44%** (standardized)
+* **02_Normalization (`MinMaxScaler`, `MaxAbsScaler`, `RobustScaler`)**:
+  * Step-by-step mental math before code for every technique
+  * **Min-Max Scaling**: Mapping to $[0, 1]$ via $\frac{x - x_{min}}{x_{max} - x_{min}}$, image pixels $0\dots 255 \rightarrow 0\dots 1$, and outlier squashing risk
+  * **Mean Normalization**: Centering at 0 and dividing by range $\frac{x - \mu}{x_{max} - x_{min}}$ (distinguished from standardization)
+  * **Max Absolute Scaling**: Scaling to $[-1, 1]$ via $\frac{x}{\max(|x|)}$ and its critical superpower on **Sparse Data** (preserves zero structure without memory explosions)
+  * **Robust Scaling**: Leveraging Median and Interquartile Range ($IQR = Q_3 - Q_1$) to scale data without being corrupted by extreme outliers
+  * Visual side-by-side box plots comparing all scalers on outlier-contaminated data
+  * Comprehensive **Normalization vs. Standardization** comparison table
+  * **Real-World Experiment**: Benchmarking KNN on Wine recognition dataset comparing Unscaled (72.22%) vs. Min-Max (94.44%) vs. Robust Scaling (94.44%)
 
 ---
 
