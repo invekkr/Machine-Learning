@@ -44,9 +44,12 @@ ML/
 │   ├── 02_Normalization/
 │   │   ├── notes.md                    # Min-Max, Mean Norm, MaxAbs (Sparse data), Robust (IQR)
 │   │   └── normalization.ipynb         # Step-by-step mental math + Scikit-Learn implementations
-│   └── 03_Encoding_Categorical_Data/
-│       ├── notes.md                    # Nominal vs Ordinal, OrdinalEncoder, LabelEncoder vs OHE
-│       └── encoding_categorical_data.ipynb # Decision trees, artificial distance traps, Titanic case study
+│   ├── 03_Encoding_Categorical_Data/
+│   │   ├── notes.md                    # Nominal vs Ordinal, OrdinalEncoder, LabelEncoder vs OHE
+│   │   └── encoding_categorical_data.ipynb # Decision trees, artificial distance traps, Titanic case study
+│   └── 04_One_Hot_Encoding/
+│       ├── notes.md                    # Deep dive: OHE mechanics, Dummy Variable Trap, high cardinality
+│       └── one_hot_encoding.ipynb      # Step-by-step Pandas vs Sklearn, leakage, rare grouping
 └── outputs/
     ├── plots/                          # Saved figures and visualizations
     └── reports/                        # Automated profiling HTML reports
@@ -123,6 +126,16 @@ ML/
   * Decision framework: Input ($X$) vs. Target ($y$), Ordinal vs. Nominal
   * Data leakage prevention across train/test splits with `handle_unknown='ignore'`
   * **Titanic Case Study**: Encoding nominal `Sex` & `Embarked` with OHE, ordinal `Pclass` with OrdinalEncoder, and verifying clean model ingestion with Logistic Regression
+* **04_One_Hot_Encoding (Deep Dive)**:
+  * Foundational concept: mapping each unique nominal category to an independent binary indicator column ($1 = \text{present}, 0 = \text{absent}$)
+  * Mathematical distance preservation: proving categories are equidistant ($\sqrt{2} \approx 1.414$)
+  * **The Dummy Variable Trap**: Why $N$ categories cause perfect multicollinearity ($r = -1.0$) and how dropping one column ($N - 1$) preserves full information while avoiding singular matrices
+  * **Pandas Implementation**: `pd.get_dummies(df, drop_first=True)` for rapid exploratory analysis
+  * **Scikit-Learn Implementation**: `OneHotEncoder(sparse_output=False, drop='first')` for production pipelines
+  * **Leakage & Execution**: Strict split-first protocol, difference between `fit()`, `transform()`, and `fit_transform()`
+  * **Unseen Categories**: Production handling via `handle_unknown="ignore"` (zero-vector fallback without crashing)
+  * **High Cardinality & Dimensionality Explosion**: Memory and computational risks of wide matrices
+  * **Rare Category Grouping**: Pruning rare labels into `"Other"` using frequency/percentage thresholds without arbitrary magic rules
 
 ---
 
