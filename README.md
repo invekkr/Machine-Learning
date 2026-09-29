@@ -15,7 +15,8 @@ ML/
 ├── README.md
 ├── requirements.txt
 ├── data/
-│   └── titanic.csv                     # Primary dataset used across modules
+│   ├── titanic.csv                     # Primary dataset used across Modules 1 & 2
+│   └── wine.csv                        # Chemical recognition dataset used for Feature Scaling
 ├── 01_Data_Handling/
 │   ├── 01_Working_with_Files/
 │   │   ├── notes.md                    # File formats, I/O parameters, head/tail/sample
@@ -36,6 +37,10 @@ ML/
 │   └── 04_Pandas_Profiling/
 │       ├── notes.md                    # YData Profiling, automated EDA, metrics & warnings
 │       └── pandas_profiling.ipynb
+├── 03_Feature_Engineering/
+│   └── 01_Standardization/
+│       ├── notes.md                    # Z-score theory, algorithms affected, leakage prevention
+│       └── standardization.ipynb       # Practical experiment: KNN Without vs With Scaling
 └── outputs/
     ├── plots/                          # Saved figures and visualizations
     └── reports/                        # Automated profiling HTML reports
@@ -84,11 +89,25 @@ ML/
   * Interpreting warnings: High cardinality, collinearity/high correlation, zeros, missingness
   * The boundaries of automated EDA: Why automation accelerates discovery but cannot replace human domain intuition or problem formulation
 
+### Module 3: Feature Engineering
+* **01_Standardization (`StandardScaler`)**:
+  * Mathematical foundations of Z-score normalization: $z = \frac{x - \mu}{\sigma}$
+  * Distinction between **Centering** ($\mu \rightarrow 0$) and **Scaling** ($\sigma \rightarrow 1$)
+  * Why distribution shape is strictly preserved (standardization does NOT convert skewed data into normal)
+  * Outlier persistence (outliers remain outliers; only their scale shifts into standard deviation units)
+  * Identifying scale-sensitive algorithms (KNN, SVM, K-Means, Neural Networks) vs. scale-invariant tree models (Decision Trees, Random Forests, XGBoost)
+  * Rigorous prevention of **Train/Test Data Leakage** (`fit_transform` on `X_train`, `transform` on `X_test`)
+  * **Head-to-Head Practical Experiment**: KNN on Wine recognition dataset demonstrating a jump from **72.22%** (unscaled) to **94.44%** (standardized)
+
 ---
 
-## 🚢 The Primary Dataset: Titanic
+## 🚢 Datasets Used
 
-All concepts are demonstrated on the canonical Titanic dataset (`data/titanic.csv`), containing 891 passenger records with 12 features:
+### 1. Titanic Dataset (`data/titanic.csv`)
+Used across Modules 1 & 2 for Data Handling and Exploratory Data Analysis (891 passenger records, 12 features).
+
+### 2. Wine Recognition Dataset (`data/wine.csv`)
+Used in Module 3 for Feature Scaling (178 samples, 13 continuous chemical features with disparate magnitudes ranging from 0.1 to 1,680+).
 
 | Column | Type | Description |
 | :--- | :--- | :--- |
