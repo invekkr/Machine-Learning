@@ -41,9 +41,12 @@ ML/
 │   ├── 01_Standardization/
 │   │   ├── notes.md                    # Z-score theory, algorithms affected, leakage prevention
 │   │   └── standardization.ipynb       # Practical experiment: KNN Without vs With Scaling
-│   └── 02_Normalization/
-│       ├── notes.md                    # Min-Max, Mean Norm, MaxAbs (Sparse data), Robust (IQR)
-│       └── normalization.ipynb         # Step-by-step mental math + Scikit-Learn implementations
+│   ├── 02_Normalization/
+│   │   ├── notes.md                    # Min-Max, Mean Norm, MaxAbs (Sparse data), Robust (IQR)
+│   │   └── normalization.ipynb         # Step-by-step mental math + Scikit-Learn implementations
+│   └── 03_Encoding_Categorical_Data/
+│       ├── notes.md                    # Nominal vs Ordinal, OrdinalEncoder, LabelEncoder vs OHE
+│       └── encoding_categorical_data.ipynb # Decision trees, artificial distance traps, Titanic case study
 └── outputs/
     ├── plots/                          # Saved figures and visualizations
     └── reports/                        # Automated profiling HTML reports
@@ -110,6 +113,16 @@ ML/
   * Visual side-by-side box plots comparing all scalers on outlier-contaminated data
   * Comprehensive **Normalization vs. Standardization** comparison table
   * **Real-World Experiment**: Benchmarking KNN on Wine recognition dataset comparing Unscaled (72.22%) vs. Min-Max (94.44%) vs. Robust Scaling (94.44%)
+* **03_Encoding_Categorical_Data (`OrdinalEncoder`, `OneHotEncoder`, `LabelEncoder`)**:
+  * Qualitative vs. Quantitative features and why ML math requires numbers
+  * **Nominal vs. Ordinal**: Dissecting unordered labels (City, Gender) vs. hierarchical ranks (Education, Feedback)
+  * **Ordinal Encoding**: Preserving true real-world order via `OrdinalEncoder(categories=[...])` and why arbitrary alphabetical sorting fails
+  * **Label Encoding**: Strictly for 1D classification target labels ($y$), NOT nominal input features ($X$)
+  * **The Artificial Distance Trap**: Why assigning integers to nominal features (Chennai: 0, Delhi: 1, Mumbai: 2) teaches algorithms false linear hierarchies
+  * **One-Hot Encoding**: Representing nominal features as equidistant binary vectors without artificial rankings (`OneHotEncoder(sparse_output=False)`)
+  * Decision framework: Input ($X$) vs. Target ($y$), Ordinal vs. Nominal
+  * Data leakage prevention across train/test splits with `handle_unknown='ignore'`
+  * **Titanic Case Study**: Encoding nominal `Sex` & `Embarked` with OHE, ordinal `Pclass` with OrdinalEncoder, and verifying clean model ingestion with Logistic Regression
 
 ---
 
