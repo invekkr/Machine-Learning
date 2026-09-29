@@ -57,9 +57,12 @@ ML/
 │   ├── 05_Column_Transformer/
 │   │   ├── notes.md                    # Traffic controller, syntax (name, transformer, cols), remainder
 │   │   └── column_transformer.ipynb    # Multi-type preprocessing, SimpleImputer, Pipeline integration
-│   └── 06_Machine_Learning_Pipeline/
-│       ├── notes.md                    # Automated workflows, fit/predict mechanics, CV & GridSearch
-│       └── machine_learning_pipeline.ipynb # End-to-end customer purchase classification pipeline
+│   ├── 06_Machine_Learning_Pipeline/
+│   │   ├── notes.md                    # Automated workflows, fit/predict mechanics, CV & GridSearch
+│   │   └── machine_learning_pipeline.ipynb # End-to-end customer purchase classification pipeline
+│   └── 07_Mathematical_Transformations/
+│       ├── notes.md                    # Skewness, Log, Sqrt, Reciprocal, FunctionTransformer, QQ plots
+│       └── mathematical_transformations.ipynb # Real experiment: Linear Regression with vs without log transform
 └── outputs/
     ├── plots/                          # Saved figures and visualizations
     └── reports/                        # Automated profiling HTML reports
@@ -189,6 +192,18 @@ ML/
   * Simultaneous hyperparameter tuning using `GridSearchCV` on models and preprocessing steps
   * Safe model deployment: Saving and loading full pipelines with `pickle` (and security considerations)
   * End-to-end practical experiment: Training and evaluating a customer purchase classification pipeline
+* **07_Mathematical_Transformations (`FunctionTransformer`, Log, Sqrt, Reciprocal, QQ Plots)**:
+  * Difference between **Feature Scaling** (changes range/scale, preserves shape) and **Mathematical Transformation** (changes distribution shape and skewness)
+  * Identifying **Right Skewness** ($\text{Mean} > \text{Median}$) vs. **Left Skewness** ($\text{Mean} < \text{Median}$)
+  * **Log Transformation**: Compressing extreme right tails via $\ln(x)$ and zero-handling via $\ln(1 + x)$ (`np.log1p`)
+  * **Square Root Transformation**: Mild compression for moderate positive skewness via $\sqrt{x}$
+  * **Reciprocal Transformation**: Inverting features via $\frac{1}{x}$ and handling non-zero requirements
+  * **Square Transformation**: Expanding variance for left-skewed distributions via $x^2$
+  * Visual normality diagnostics: **Quantile-Quantile (QQ) plots** using `scipy.stats.probplot`
+  * Scikit-Learn integration: Wrapping NumPy mathematical functions into reusable pipeline objects with `FunctionTransformer(..., feature_names_out='one-to-one')`
+  * Multi-column preprocessing: Combining `FunctionTransformer` with `StandardScaler` and `OneHotEncoder` inside `ColumnTransformer`
+  * Model sensitivity reality check: Why tree-based models (Random Forests, XGBoost) are invariant to monotonic transformations, while linear/distance-based models benefit
+  * **Head-to-Head Practical Experiment**: Evaluating Linear Regression on skewed feature data, demonstrating a test error reduction ($\text{MAE}: \$1,036.87 \to \$883.27$, $R^2: 0.5402 \to 0.6275$)
 
 ---
 
