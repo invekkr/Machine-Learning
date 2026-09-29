@@ -8,71 +8,6 @@ Each module follows a dual-format learning architecture:
 
 ---
 
-## 🗂️ Repository Structure
-
-```text
-ML/
-├── README.md
-├── requirements.txt
-├── Prerequisites/                     # Comprehensive foundations for the entire ML curriculum
-│   ├── README.md                      # Roadmap, learning order, and algorithm prerequisite map
-│   ├── 01_Python_Prerequisites/       # Python, NumPy, Pandas, Data Handling, Viz, Sklearn, Notebooks
-│   └── 02_Mathematics_Prerequisites/  # Arithmetic, Algebra, Functions, Stats, Prob, LinAlg, Calc, Opt
-├── data/
-│   ├── titanic.csv                     # Primary dataset used across Modules 1 & 2
-│   └── wine.csv                        # Chemical recognition dataset used for Feature Scaling
-├── 01_Data_Handling/
-│   ├── 01_Working_with_Files/
-│   │   ├── notes.md                    # File formats, I/O parameters, head/tail/sample
-│   │   └── working_with_files.ipynb
-│   └── 02_Understanding_Data/
-│       ├── notes.md                    # Structural inspection, stats, missing/duplicates, correlation
-│       └── understanding_data.ipynb
-├── 02_EDA/
-│   ├── 01_Univariate_Analysis/
-│   │   ├── notes.md                    # Categorical & numerical distributions, outliers, dispersion
-│   │   └── univariate_analysis.ipynb
-│   ├── 02_Bivariate_Analysis/
-│   │   ├── notes.md                    # Num-Num, Num-Cat, Cat-Cat relationships, crosstabs
-│   │   └── bivariate_analysis.ipynb
-│   ├── 03_Multivariate_Analysis/
-│   │   ├── notes.md                    # 3+ variables, encodings (hue, style, size), Simpson's Paradox
-│   │   └── multivariate_analysis.ipynb
-│   └── 04_Pandas_Profiling/
-│       ├── notes.md                    # YData Profiling, automated EDA, metrics & warnings
-│       └── pandas_profiling.ipynb
-├── 03_Feature_Engineering/
-│   ├── 01_Standardization/
-│   │   ├── notes.md                    # Z-score theory, algorithms affected, leakage prevention
-│   │   └── standardization.ipynb       # Practical experiment: KNN Without vs With Scaling
-│   ├── 02_Normalization/
-│   │   ├── notes.md                    # Min-Max, Mean Norm, MaxAbs (Sparse data), Robust (IQR)
-│   │   └── normalization.ipynb         # Step-by-step mental math + Scikit-Learn implementations
-│   ├── 03_Encoding_Categorical_Data/
-│   │   ├── notes.md                    # Nominal vs Ordinal, OrdinalEncoder, LabelEncoder vs OHE
-│   │   └── encoding_categorical_data.ipynb # Decision trees, artificial distance traps, Titanic case study
-│   ├── 04_One_Hot_Encoding/
-│   │   ├── notes.md                    # Deep dive: OHE mechanics, Dummy Variable Trap, high cardinality
-│   │   └── one_hot_encoding.ipynb      # Step-by-step Pandas vs Sklearn, leakage, rare grouping
-│   ├── 05_Column_Transformer/
-│   │   ├── notes.md                    # Traffic controller, syntax (name, transformer, cols), remainder
-│   │   └── column_transformer.ipynb    # Multi-type preprocessing, SimpleImputer, Pipeline integration
-│   ├── 06_Machine_Learning_Pipeline/
-│   │   ├── notes.md                    # Automated workflows, fit/predict mechanics, CV & GridSearch
-│   │   └── machine_learning_pipeline.ipynb # End-to-end customer purchase classification pipeline
-│   ├── 07_Mathematical_Transformations/
-│   │   ├── notes.md                    # Skewness, Log, Sqrt, Reciprocal, FunctionTransformer, QQ plots
-│   │   └── mathematical_transformations.ipynb # Real experiment: Linear Regression with vs without log transform
-│   └── 08_Discretization_and_Binarization/
-│       ├── notes.md                    # KBinsDiscretizer (uniform, quantile, kmeans), Binarizer, info loss
-│       └── discretization_binarization.ipynb # Real experiment: Logistic Regression with vs without Age binning
-└── outputs/
-    ├── plots/                          # Saved figures and visualizations
-    └── reports/                        # Automated profiling HTML reports
-```
-
----
-
 ## 📚 Syllabus & Modules Covered
 
 ### Foundational Prerequisites ([`Prerequisites/`](file:///Users/shamvi/stuff/ML/Prerequisites/))
@@ -220,31 +155,6 @@ ML/
   * Outlier capping: How binning bounds extreme tail values without row deletion
   * Leakage-proof Train/Test workflow and integration into `ColumnTransformer` and `Pipeline`
   * **Real-World Titanic Experiment**: Benchmarking Logistic Regression comparing continuous scaled `Age` (78.77% acc, 72.86% F1) vs. quantile binned `Age` (77.09% acc, 71.33% F1), validating the impact of information loss
-
----
-
-## 🚢 Datasets Used
-
-### 1. Titanic Dataset (`data/titanic.csv`)
-Used across Modules 1 & 2 for Data Handling and Exploratory Data Analysis (891 passenger records, 12 features).
-
-### 2. Wine Recognition Dataset (`data/wine.csv`)
-Used in Module 3 for Feature Scaling (178 samples, 13 continuous chemical features with disparate magnitudes ranging from 0.1 to 1,680+).
-
-| Column | Type | Description |
-| :--- | :--- | :--- |
-| `PassengerId` | Discrete Integer | Unique passenger identifier |
-| `Survived` | Binary Categorical | Survival target (0 = No, 1 = Yes) |
-| `Pclass` | Ordinal Categorical | Ticket class (1 = 1st, 2 = 2nd, 3 = 3rd) |
-| `Name` | Text / String | Passenger name (including title) |
-| `Sex` | Nominal Categorical | Passenger gender (male, female) |
-| `Age` | Continuous Numerical | Passenger age in years |
-| `SibSp` | Discrete Numerical | Number of siblings / spouses aboard |
-| `Parch` | Discrete Numerical | Number of parents / children aboard |
-| `Ticket` | Categorical / String | Ticket number |
-| `Fare` | Continuous Numerical | Passenger fare paid (£) |
-| `Cabin` | Categorical / String | Cabin number (high missingness) |
-| `Embarked` | Nominal Categorical | Port of embarkation (C = Cherbourg, Q = Queenstown, S = Southampton) |
 
 ---
 
