@@ -50,9 +50,12 @@ ML/
 │   ├── 04_One_Hot_Encoding/
 │   │   ├── notes.md                    # Deep dive: OHE mechanics, Dummy Variable Trap, high cardinality
 │   │   └── one_hot_encoding.ipynb      # Step-by-step Pandas vs Sklearn, leakage, rare grouping
-│   └── 05_Column_Transformer/
-│       ├── notes.md                    # Traffic controller, syntax (name, transformer, cols), remainder
-│       └── column_transformer.ipynb    # Multi-type preprocessing, SimpleImputer, Pipeline integration
+│   ├── 05_Column_Transformer/
+│   │   ├── notes.md                    # Traffic controller, syntax (name, transformer, cols), remainder
+│   │   └── column_transformer.ipynb    # Multi-type preprocessing, SimpleImputer, Pipeline integration
+│   └── 06_Machine_Learning_Pipeline/
+│       ├── notes.md                    # Automated workflows, fit/predict mechanics, CV & GridSearch
+│       └── machine_learning_pipeline.ipynb # End-to-end customer purchase classification pipeline
 └── outputs/
     ├── plots/                          # Saved figures and visualizations
     └── reports/                        # Automated profiling HTML reports
@@ -150,6 +153,17 @@ ML/
   * Leakage-proof train/test workflow: `fit_transform(X_train)` and `transform(X_test)`
   * Output feature tracking with `get_feature_names_out()` and understanding output column expansion
   * Production ML pipelines: Connecting `ColumnTransformer` directly to estimators using `Pipeline`
+* **06_Machine_Learning_Pipeline (`sklearn.pipeline.Pipeline`)**:
+  * Foundational concept: The automated assembly line connecting data cleaning, preprocessing, and modeling
+  * Why Pipelines are necessary: Code simplicity, train/test consistency, and absolute prevention of data leakage
+  * Pipeline mechanics: What happens during `fit()` (fit + transform on transformers, fit on model) vs. `predict()` (transform only)
+  * The Dream Team: How `ColumnTransformer` (WHERE) and `Pipeline` (WHEN / ORDER) nest together seamlessly
+  * Modular Sub-Pipelines: Building dedicated imputation + scaling/encoding lanes for numerical and categorical groups
+  * Pipeline inspection: Exploring components via `named_steps` and parameters via `get_params()` with double underscores (`__`)
+  * Leakage-proof Cross-Validation: Ensuring preprocessing is fit strictly inside training folds during `cross_val_score`
+  * Simultaneous hyperparameter tuning using `GridSearchCV` on models and preprocessing steps
+  * Safe model deployment: Saving and loading full pipelines with `pickle` (and security considerations)
+  * End-to-end practical experiment: Training and evaluating a customer purchase classification pipeline
 
 ---
 
