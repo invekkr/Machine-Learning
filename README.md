@@ -47,9 +47,12 @@ ML/
 │   ├── 03_Encoding_Categorical_Data/
 │   │   ├── notes.md                    # Nominal vs Ordinal, OrdinalEncoder, LabelEncoder vs OHE
 │   │   └── encoding_categorical_data.ipynb # Decision trees, artificial distance traps, Titanic case study
-│   └── 04_One_Hot_Encoding/
-│       ├── notes.md                    # Deep dive: OHE mechanics, Dummy Variable Trap, high cardinality
-│       └── one_hot_encoding.ipynb      # Step-by-step Pandas vs Sklearn, leakage, rare grouping
+│   ├── 04_One_Hot_Encoding/
+│   │   ├── notes.md                    # Deep dive: OHE mechanics, Dummy Variable Trap, high cardinality
+│   │   └── one_hot_encoding.ipynb      # Step-by-step Pandas vs Sklearn, leakage, rare grouping
+│   └── 05_Column_Transformer/
+│       ├── notes.md                    # Traffic controller, syntax (name, transformer, cols), remainder
+│       └── column_transformer.ipynb    # Multi-type preprocessing, SimpleImputer, Pipeline integration
 └── outputs/
     ├── plots/                          # Saved figures and visualizations
     └── reports/                        # Automated profiling HTML reports
@@ -136,6 +139,17 @@ ML/
   * **Unseen Categories**: Production handling via `handle_unknown="ignore"` (zero-vector fallback without crashing)
   * **High Cardinality & Dimensionality Explosion**: Memory and computational risks of wide matrices
   * **Rare Category Grouping**: Pruning rare labels into `"Other"` using frequency/percentage thresholds without arbitrary magic rules
+* **05_Column_Transformer (`sklearn.compose.ColumnTransformer`)**:
+  * Foundational concept: The central traffic controller for datasets with mixed numerical, ordinal, and nominal data types
+  * The manual preprocessing problem: Why manual column slicing and stacking is error-prone and brittle
+  * Syntax architecture: The `(name, transformer, columns)` tuple structure
+  * Execution mechanics: How `fit_transform()` splits, fits, transforms, and horizontally stacks arrays
+  * Handling unmentioned columns: `remainder='drop'` vs. `remainder='passthrough'`
+  * Multi-type preprocessing: Unifying `StandardScaler`, `OrdinalEncoder`, and `OneHotEncoder`
+  * Missing value handling: Integrating `SimpleImputer` inside `ColumnTransformer`
+  * Leakage-proof train/test workflow: `fit_transform(X_train)` and `transform(X_test)`
+  * Output feature tracking with `get_feature_names_out()` and understanding output column expansion
+  * Production ML pipelines: Connecting `ColumnTransformer` directly to estimators using `Pipeline`
 
 ---
 
