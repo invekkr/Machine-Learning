@@ -14,6 +14,10 @@ Each module follows a dual-format learning architecture:
 ML/
 ├── README.md
 ├── requirements.txt
+├── Prerequisites/                     # Comprehensive foundations for the entire ML curriculum
+│   ├── README.md                      # Roadmap, learning order, and algorithm prerequisite map
+│   ├── 01_Python_Prerequisites/       # Python, NumPy, Pandas, Data Handling, Viz, Sklearn, Notebooks
+│   └── 02_Mathematics_Prerequisites/  # Arithmetic, Algebra, Functions, Stats, Prob, LinAlg, Calc, Opt
 ├── data/
 │   ├── titanic.csv                     # Primary dataset used across Modules 1 & 2
 │   └── wine.csv                        # Chemical recognition dataset used for Feature Scaling
@@ -64,6 +68,27 @@ ML/
 ---
 
 ## 📚 Syllabus & Modules Covered
+
+### Foundational Prerequisites ([`Prerequisites/`](file:///Users/shamvi/stuff/ML/Prerequisites/))
+* **01_Python_Prerequisites**:
+  * **01_Python_Basics**: Variables, basic data types (`int`, `float`, `str`, `bool`, `None`), lists, tuples, sets, dicts, indexing, loops, functions, comprehensions
+  * **02_NumPy**: `ndarray` memory layout, 1D/2D shapes, slicing, vectorized arithmetic, aggregations (`axis=0`/`axis=1`), dot products
+  * **03_Pandas**: Series vs DataFrames, CSV loading, row/column slicing, boolean filtering, missing value imputation, `describe()`, `groupby()`
+  * **04_Data_Handling**: Features ($X$) vs Target ($y$), Continuous vs Discrete, Train/Val/Test splits, Data Leakage prevention
+  * **05_Matplotlib_Seaborn**: Scatter plots, line charts, histograms & KDE, bar plots, box plots, correlation heatmaps
+  * **06_Scikit_Learn**: The Estimator API, Transformers (`fit`, `transform`), Predictors (`fit`, `predict`), `Pipeline`
+  * **07_Jupyter_Notebook**: Cells, background kernel memory, execution order, reproducibility
+  * **08_ML_Programming_Concepts**: Dimensionality `(N, D)`, parameters vs hyperparameters, `random_state` reproducibility
+* **02_Mathematics_Prerequisites**:
+  * **01_Basic_Mathematics**: Exponents, square roots, logarithms ($\log_{10}$, $\log_2$, $\ln$), Euler's constant ($e$), scientific notation
+  * **02_Algebra**: Variables, constants, linear equations, rearranging formulas, systems of equations, quadratic loss curves ($y = w^2$)
+  * **03_Functions_and_Graphs**: Inputs $\to$ rule $\to$ outputs, $f(x) = 2x + 1$, slope ($m = \text{Rise}/\text{Run}$), intercept ($b$), linear vs non-linear curves
+  * **04_Statistics**: Central tendency (Mean, Median, Mode), Dispersion (Range, Variance, Standard Deviation, IQR), Skewness, Outliers, Z-scores
+  * **05_Probability**: Sample space, probabilities $[0, 1]$, independent vs dependent events, conditional probability, **Bayes' Theorem**
+  * **06_Linear_Algebra**: Scalars, vectors, dot products, matrices, matrix multiplication, transpose, identity, inverse, covariance matrix, **Eigenvalues & Eigenvectors**
+  * **07_Calculus**: Limits, derivatives as speed/slope, polynomial power rules, **Partial Derivatives** ($\frac{\partial f}{\partial x}$), **Gradient Vector** ($\nabla$)
+  * **08_Optimization**: Minima, maxima, loss vs cost functions, **Gradient Descent** ($\theta = \theta - \alpha \nabla J$), learning rates, SGD
+  * **09_Common_ML_Mathematical_Concepts**: Euclidean vs Manhattan distance, MAE/MSE/RMSE, Sigmoid function, Entropy & Information Gain, $L_1$/$L_2$ Regularization
 
 ### Module 1: Data Handling
 * **01_Working_with_Files**:
