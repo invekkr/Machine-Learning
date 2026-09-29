@@ -60,9 +60,12 @@ ML/
 │   ├── 06_Machine_Learning_Pipeline/
 │   │   ├── notes.md                    # Automated workflows, fit/predict mechanics, CV & GridSearch
 │   │   └── machine_learning_pipeline.ipynb # End-to-end customer purchase classification pipeline
-│   └── 07_Mathematical_Transformations/
-│       ├── notes.md                    # Skewness, Log, Sqrt, Reciprocal, FunctionTransformer, QQ plots
-│       └── mathematical_transformations.ipynb # Real experiment: Linear Regression with vs without log transform
+│   ├── 07_Mathematical_Transformations/
+│   │   ├── notes.md                    # Skewness, Log, Sqrt, Reciprocal, FunctionTransformer, QQ plots
+│   │   └── mathematical_transformations.ipynb # Real experiment: Linear Regression with vs without log transform
+│   └── 08_Discretization_and_Binarization/
+│       ├── notes.md                    # KBinsDiscretizer (uniform, quantile, kmeans), Binarizer, info loss
+│       └── discretization_binarization.ipynb # Real experiment: Logistic Regression with vs without Age binning
 └── outputs/
     ├── plots/                          # Saved figures and visualizations
     └── reports/                        # Automated profiling HTML reports
@@ -204,6 +207,19 @@ ML/
   * Multi-column preprocessing: Combining `FunctionTransformer` with `StandardScaler` and `OneHotEncoder` inside `ColumnTransformer`
   * Model sensitivity reality check: Why tree-based models (Random Forests, XGBoost) are invariant to monotonic transformations, while linear/distance-based models benefit
   * **Head-to-Head Practical Experiment**: Evaluating Linear Regression on skewed feature data, demonstrating a test error reduction ($\text{MAE}: \$1,036.87 \to \$883.27$, $R^2: 0.5402 \to 0.6275$)
+* **08_Discretization_and_Binarization (`KBinsDiscretizer`, `Binarizer`, `pd.cut`)**:
+  * Foundational concept: Converting continuous numerical features into discrete intervals or binary decisions
+  * Why bin: Simplifying noisy signals, handling outliers, modeling non-linear piecewise ranges, and business policy interpretation
+  * **Equal Width Binning (`uniform`)**: Partitioning by constant range width $\frac{x_{\max} - x_{\min}}{k}$ and handling outlier skew risks
+  * **Equal Frequency Binning (`quantile`)**: Partitioning by sample quantiles to guarantee balanced observation counts per bin
+  * **K-Means Binning (`kmeans`)**: Grouping multimodal clustered data via 1D K-Means cluster centroid midpoints
+  * **Custom Domain Binning**: Segmenting via business rules and statutes (e.g. Minor, Adult, Senior) using `pd.cut()`
+  * `KBinsDiscretizer` parameters: `n_bins`, `strategy` (`uniform`, `quantile`, `kmeans`), and `encode` (`ordinal`, `onehot-dense`)
+  * **Binarization (`Binarizer`)**: Threshold-based conversion to 0/1; precise mathematical behavior ($x > \text{threshold} \implies 1, \ x \le \text{threshold} \implies 0$)
+  * **The Information Loss Trade-Off**: Why collapsing values into bins permanently discards within-bin precision
+  * Outlier capping: How binning bounds extreme tail values without row deletion
+  * Leakage-proof Train/Test workflow and integration into `ColumnTransformer` and `Pipeline`
+  * **Real-World Titanic Experiment**: Benchmarking Logistic Regression comparing continuous scaled `Age` (78.77% acc, 72.86% F1) vs. quantile binned `Age` (77.09% acc, 71.33% F1), validating the impact of information loss
 
 ---
 
