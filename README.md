@@ -155,6 +155,60 @@ Each module follows a dual-format learning architecture:
   * Outlier capping: How binning bounds extreme tail values without row deletion
   * Leakage-proof Train/Test workflow and integration into `ColumnTransformer` and `Pipeline`
   * **Real-World Titanic Experiment**: Benchmarking Logistic Regression comparing continuous scaled `Age` (78.77% acc, 72.86% F1) vs. quantile binned `Age` (77.09% acc, 71.33% F1), validating the impact of information loss
+* **09_Handling_Mixed_Variables (`df.str.extract`, Regex Token Rules, Contextual Imputation, Rare Prefix Grouping)**:
+  * Foundational concept: Unpacking multi-component strings containing mixed categorical and numerical signals (e.g. `Cabin` and `Ticket`)
+  * The high-cardinality hazard: Why feeding raw alphanumeric strings into `OneHotEncoder` causes dimensionality explosion (681 unique tickets) and destroys generalizability
+  * Pure Python vs Regular Expressions: Why naive fixed-index string slicing fails on multi-item strings (`C23 C25 C27`) and how Regex capture groups extract targets reliably
+  * **Regex Engine Mechanics**: Character classes (`[A-Za-z]`), digit quantifiers (`\d+`), trailing anchors (`$`), and capture parentheses `(...)`
+  * Vectorized component extraction: Using `pd.Series.str.extract(r'([A-Za-z])\s*(\d+)?')` to extract `Cabin_Deck` and `Cabin_Number` at C-speed
+  * Contextual missing value resolution: Assigning an explicit `'Missing'` category to `Cabin_Deck` (preserving unassigned status) vs. setting `Cabin_Number = 0` (physical meaning of no private room)
+  * Punctuation standardization and long-tail prefix grouping: Cleaning irregular tokens (`.` and `/`) and collapsing rare prefixes ($< 10$ occurrences) into `'OTHER'`
+  * Production Machine Learning Pipelines: Integrating extracted mixed components with `OneHotEncoder`, `StandardScaler`, and `SimpleImputer` inside `ColumnTransformer`
+  * **Head-to-Head Titanic Experiment**: Benchmarking Random Forest classifiers (Baseline without mixed features vs. Engineered features with extracted deck and ticket signals)
+  * Feature Importance Discovery: Proving that extracted `Cabin_Number` and `Cabin_Deck_Missing` rank in the top 5 most important predictors (accounting for >16% total Gini importance)
+* **10_Complete_Case_Analysis (`df.dropna`, Listwise Deletion, MCAR Assumption, Distribution Shift Audits)**:
+  * Foundational concept: Discarding observations containing missing values across the analyzed feature set
+  * Pure Python vs. Pandas: Manual boolean masking (`~df.isnull().any(axis=1)`) vs. optimized `df.dropna(subset=['col'])`
+  * **The Core Statistical Assumption**: MCAR (Missing Completely At Random) vs. MAR (Missing At Random) and MNAR (Missing Not At Random)
+  * The 5% rule of thumb: Balancing statistical power and sample size against information loss
+  * Selection bias and population distortion: How non-random missingness alters demographic distributions and feature relationships
+  * **Distribution Diagnostics**: Quantitative checks for mean, median, standard deviation, and variance ratio ($\text{Var}_{\text{after}} / \text{Var}_{\text{before}}$) alongside categorical class proportions
+  * **Titanic Case Studies**:
+    * *Safe CCA*: `Embarked` (0.22% missing $\to$ exactly 0.0% distribution shift across all categories)
+    * *Biased CCA*: `Age` (19.87% missing $\to$ non-random MAR mechanism depleting 3rd class representation by -5.39% and inflating mean fare by +$2.49)
+    * *Catastrophic CCA*: `Cabin` (77.10% missing $\to$ destroying 77% of rows vs. column removal)
+  * **Production ML Experiment**: Training KNN classifier on complete cases (82.01% test accuracy) and uncovering the **production failure mode** (`ValueError: Input X contains NaN`) when unhandled nulls arrive at inference time
+* **11_Handling_Missing_Numerical_Data (`SimpleImputer`, Mean, Median, Arbitrary Value, End of Distribution)**:
+  * Foundational concept: Preserving 100% of observations by replacing missing values with univariate statistics from the same feature
+  * **Mean vs. Median Selection**: Why mean is sensitive to outliers and suitable for symmetric data, while median is robust and preferred for skewed data
+  * **The 3 Inherent Side Effects**:
+    * Variance deflation: Why adding constant values reduces $\text{Var}(X)$ by adding zero-deviation points
+    * Distribution shape distortion: Why imputed datasets develop unnatural central density spikes
+    * Covariance dilution: Weakened linear relationships ($r$) with other features
+  * **Arbitrary Value Imputation**: Deliberately using constants (like `-1` or `999`) to signal missingness to tree-based algorithms
+  * **End-of-Distribution Imputation**: Placing missing values at the extreme 3-sigma tail ($\mu + 3\sigma$) or IQR boxplot fence ($Q_3 + 1.5\text{IQR}$) to dynamically scale with the data
+  * **Production Preprocessing with `SimpleImputer`**: Strict leakage prevention (`imputer.fit(X_train)` and `imputer.transform(X_test)`)
+  * **The 4-Pillar Validation Checklist**: Auditing Variance ratio, KDE distribution overlay, Covariance/Pearson $r$, and Outlier boxplots
+  * **Head-to-Head Titanic Experiment**: Benchmarking Random Forest classifiers across CCA vs. Mean vs. Median vs. Arbitrary vs. End-of-Tail imputation
+* **12_Handling_Missing_Categorical_Data (`SimpleImputer`, Most Frequent / Mode Imputation, Missing Category Imputation)**:
+  * Foundational concept: Handling text-based missing data where mathematical averages (mean/median) cannot be calculated
+  * **Most Frequent (Mode) Imputation**: Replacing missing labels with the most commonly occurring category (`.mode()[0]`)
+  * **The Mode Inflation Trap**: Mathematical demonstration of how filling high-missingness columns with the mode artificially inflates the majority class (e.g. 60% $\to$ 93.3%) and crushes minority diversity
+  * **Missing Category Imputation**: Creating an explicit new category label (`"Missing"`) to preserve unrecorded observations without guessing
+  * Informative missingness (MNAR): Proving that missing data contains predictive signal (e.g. Titanic passengers with missing cabins had 30% survival vs. 60–75% for assigned decks)
+  * **Decision Framework**: When to use Most Frequent (<5% missing, random) vs. Missing Category (>10% missing or informative)
+  * **Production Preprocessing Pipeline**: Connecting `SimpleImputer(strategy='most_frequent')` and `SimpleImputer(strategy='constant', fill_value='Missing')` with `OneHotEncoder` and `RandomForestClassifier` inside `ColumnTransformer` with zero data leakage
+* **13_Advanced_Missing_Data_Techniques (Random Sample Imputation, Missing Indicator, GridSearchCV Imputation Tuning)**:
+  * Foundational concept: Preserving univariate variance, capturing informative missingness, and automating strategy selection
+  * **Random Sample Imputation**: Replaces missing values by sampling from observed non-null data, preserving natural variance (204.36 vs 211.02) without artificial central peaks
+  * **The Covariance Trade-off**: Why random sampling can distort relationships between columns (e.g. pairing 20-year-olds with senior salaries)
+  * **Missing Indicator**: Appending a binary ($0/1$) flag column so the model can distinguish real values from estimated replacements
+  * Informative missingness demonstration: Proving that passengers with missing ages had significantly lower survival rates (29.4% vs 40.6%)
+  * **Scikit-Learn Implementation**: Automated indicator generation via `SimpleImputer(strategy='median', add_indicator=True)`
+  * **Automated Imputation Tuning with `GridSearchCV`**:
+    * Pairing `Pipeline` and `GridSearchCV` to test parameter combinations (`strategy=['mean', 'median']`, `add_indicator=[True, False]`)
+    * Understanding the double underscore syntax (`imputer__strategy`) and 5-fold cross-validation (`cv=5`)
+    * Empirical validation: Proving that `add_indicator=True` achieved Rank 1 (75.15% CV accuracy) over non-indicator models (73.74%)
 
 ---
 
